@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BlogApp.Migrations
 {
-    /// <inheritdoc />
+    /// <inheritdoc />   
     public partial class BlogMig : Migration
     {
         /// <inheritdoc />
