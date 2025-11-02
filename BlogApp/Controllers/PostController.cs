@@ -14,9 +14,11 @@ namespace BlogApp.Controllers
             _blogContext = blogContext;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id )
         {
-            var post = await _blogContext.Posts.ToListAsync();
+            var post = await _blogContext.Posts.
+                Include(p=>p.Comments).
+                FirstOrDefaultAsync(p=>p.Id==id);
             return View(post);
         }
 
