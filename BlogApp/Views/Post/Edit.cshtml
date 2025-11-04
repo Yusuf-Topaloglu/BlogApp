@@ -1,0 +1,39 @@
+﻿@model BlogApp.Models.Post
+
+@{
+    ViewData["Title"] = "Gönderiyi Düzenle";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">✏️ Gönderiyi Düzenle</h1>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- SADECE bu hidden fields -->
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreateDate" />
+                <!-- COMMENTS HIDDEN FIELD YOK! -->
+
+                <div class="form-group mb-3">
+                    <label asp-for="Title" class="form-label fw-bold">Başlık:</label>
+                    <input asp-for="Title" class="form-control form-control-lg" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Content" class="form-label fw-bold">İçerik:</label>
+                    <textarea asp-for="Content" class="form-control" rows="8"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit" class="btn btn-warning px-4">💾 Kaydet</button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">↩️ İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

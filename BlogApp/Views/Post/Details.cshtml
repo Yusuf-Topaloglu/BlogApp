@@ -1,0 +1,61 @@
+﻿@model BlogApp.Models.Post
+
+@{
+    ViewData["Title"] = "Gönderi Detayları";
+}
+
+<div class="container mt-4">
+    <!-- Gönderi Detayları -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1 class="card-title">@Model.Title</h1>
+            <p class="card-text">@Model.Content</p>
+            <small class="text-muted">
+                📅 Oluşturulma: @Model.CreateDate.ToString("dd.MM.yyyy HH:mm")
+            </small>
+        </div>
+    </div>
+
+    <!-- Yorum Ekleme Formu -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>💬 Yorum Ekle</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" asp-controller="Comment" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="PostId" value="@Model.Id" />
+
+                <div class="form-group mb-3">
+                    <textarea name="Text" class="form-control" rows="3"
+                              placeholder="Yorumunuzu yazın..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">📤 Yorumu Gönder</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- YORUM LİSTESİ -->
+    <div class="card">
+        <div class="card-header">
+            <h5>💬 Yorumlar (@Model.Comments?.Count ?? 0)</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Comments != null && Model.Comments.Any())
+            {
+                @foreach (var comment in Model.Comments)
+                {
+                    <div class="border-bottom pb-2 mb-2">
+                        <p class="mb-1">@comment.Text</p>
+                        <small class="text-muted">📝 Yorum ID: @comment.Id</small>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">📭 Henüz yorum yapılmamış.</p>
+            }
+        </div>
+    </div>
+</div>

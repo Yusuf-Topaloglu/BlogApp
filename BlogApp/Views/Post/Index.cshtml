@@ -1,0 +1,47 @@
+﻿@model List<Post>  
+
+<h1 class="mb-4">📝 Tüm Blog Gönderileri</h1>
+
+<!-- Yeni Gönderi Butonu -->
+<a asp-action="Create" class="btn btn-success mb-3">
+    ➕ Yeni Gönderi Oluştur
+</a>
+
+<!-- Gönderi Listesi -->
+@if (Model.Any())
+{
+    @foreach (var post in Model)
+    {
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@post.Title</h5>
+                <p class="card-text">@post.Content</p>
+                
+                <!-- Meta Bilgiler -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        📅 @post.CreateDate.ToString("dd.MM.yyyy HH:mm") | 
+                        💬 @post.Comments.Count yorum
+                    </small>
+                    
+                    <!-- Aksiyon Butonları -->
+                    <div>
+                        <a asp-action="Details" asp-route-id="@post.Id" 
+                           class="btn btn-info btn-sm">👁️ Detay</a>
+                        <a asp-action="Edit" asp-route-id="@post.Id" 
+                           class="btn btn-warning btn-sm">✏️ Düzenle</a>
+                        <a asp-action="Delete" asp-route-id="@post.Id" 
+                           class="btn btn-danger btn-sm">🗑️ Sil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info">
+        📭 Henüz hiç gönderi bulunmuyor. İlk gönderiyi oluşturmak için 
+        <a asp-action="Create" class="alert-link">buraya tıklayın</a>.
+    </div>
+}

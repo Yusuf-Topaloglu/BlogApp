@@ -14,18 +14,21 @@ namespace BlogApp.Controllers
             _blogContext = blogContext;
         }
 
-        public async Task<IActionResult> Index(int id )
+        public async Task<IActionResult> Index()
         {
-            var post = await _blogContext.Posts.
-                Include(p=>p.Comments).
-                FirstOrDefaultAsync(p=>p.Id==id);
-            return View(post);
+            var posts = await _blogContext.Posts
+                .Include(p => p.Comments)
+                .ToListAsync(); 
+            return View(posts);
         }
-
 
         public async Task<IActionResult> Details(int id)
         {
-            var post = await _blogContext.Posts.FindAsync(id);
+            
+            var post = await _blogContext.Posts
+                .Include(p => p.Comments)  
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (post == null)
                 return NotFound();
             return View(post);
@@ -40,12 +43,15 @@ namespace BlogApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Post post)
         {
-            await _blogContext.Posts.AddAsync(post);
-            await _blogContext.SaveChangesAsync();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                post.CreateDate = DateTime.Now;
+                await _blogContext.Posts.AddAsync(post);
+                await _blogContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
 
             return View(post);
-
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -60,44 +66,50 @@ namespace BlogApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CreateDate")] Post post)
+        
         {
-            if (id!=post.Id) 
-            return BadRequest();
+            if (id != post.Id)
+                return BadRequest();
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var existingPost = await _blogContext.Posts.FindAsync(id);
-                if(existingPost==null)
+                if (existingPost == null)
                     return NotFound();
-                existingPost.Title= post.Title;
-                existingPost.Content= post.Content;
 
+                existingPost.Title = post.Title;
+                existingPost.Content = post.Content;
                 await _blogContext.SaveChangesAsync();
-                return RedirectToAction("Index", "Post");
 
+                return RedirectToAction("Index");
             }
+
             return View(post);
-            
         }
 
-        public async Task<IActionResult> Delete (int id)
+        // GET: Delete (View gösterir)
+        public async Task<IActionResult> Delete(int id)
         {
-            var post = await _blogContext.Posts.FindAsync(id);
-            if(id<=0)
-                return NotFound();
+            var post = await _blogContext.Posts
+                .Include(p => p.Comments)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (post == null) return NotFound();
             return View(post);
         }
 
-        [HttpPost, ActionName("Delete")]
+        // POST: DeleteConfirmed (İşlem yapar)
+        [HttpPost, ActionName("Delete")]  // ← BU KRİTİK!
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = await _blogContext.Posts.FindAsync(id);
+            if (post == null) return NotFound();
+
             _blogContext.Posts.Remove(post);
             await _blogContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-            
         }
     }
 }

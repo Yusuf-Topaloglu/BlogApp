@@ -1,0 +1,25 @@
+﻿@model Post
+
+<h2>✨ Yeni Gönderi Oluştur</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()  <!-- Create methodunda [ValidateAntiForgeryToken] var -->
+
+    <div class="form-group mb-3">
+        <label asp-for="Title" class="form-label">Başlık:</label>
+        <input asp-for="Title" class="form-control" placeholder="Gönderi başlığını yazın..." />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Content" class="form-label">İçerik:</label>
+        <textarea asp-for="Content" class="form-control" rows="6"
+                  placeholder="Gönderi içeriğini yazın..."></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-success">✅ Oluştur</button>
+        <a asp-action="Index" class="btn btn-secondary">↩️ İptal</a>
+    </div>
+</form>
