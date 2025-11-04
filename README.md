@@ -5,7 +5,7 @@
 - ✅ One-to-Many ilişkiler (Post ↔ Comment)
 - ✅ Bootstrap 5 responsive arayüz
 - ✅ Entity Framework Core Code-First
-- ✅ Model validations
+- ✅ Model validations (Required, StringLength)
 
 ## 🎯 Özellikler
 - **Gönderi Yönetimi:** Oluşturma, düzenleme, silme, listeleme
