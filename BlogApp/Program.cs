@@ -1,3 +1,4 @@
+using BlogApp.Data;
 using BlogApp.DataContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<BlogContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
 
 var app = builder.Build();
 

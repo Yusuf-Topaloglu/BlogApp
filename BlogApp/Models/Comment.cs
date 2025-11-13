@@ -6,10 +6,11 @@ namespace BlogApp.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public string Text { get; set; } = string.Empty;  
+        [Required(ErrorMessage = "Yorum metni zorunludur!")]
+        [StringLength(500, ErrorMessage = "Yorum maksimum 500 karakter olabilir!")]
+        public string Text { get; set; } = string.Empty;
 
         public int PostId { get; set; }
-        public Post? Post { get; set; }  
+        public Post? Post { get; set; }
     }
 }
